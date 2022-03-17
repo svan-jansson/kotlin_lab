@@ -19,10 +19,11 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 
-    implementation("org.apache.kafka:kafka-clients:2.1.0")
-    implementation("org.apache.kafka:kafka-streams:2.1.0")
-    implementation("org.apache.kafka:connect-runtime:2.1.0")
+    implementation("org.apache.kafka:kafka-clients:3.1.0")
+    implementation("org.apache.kafka:kafka-streams:3.1.0")
+    implementation("org.apache.kafka:connect-runtime:3.1.0")
     implementation("io.confluent:kafka-json-serializer:5.0.1")
+    implementation("com.google.code.gson:gson:2.2.4")
 }
 
 repositories {
