@@ -8,3 +8,4 @@
  */
 
 rootProject.name = "kotlin_lab"
+include("producer")
