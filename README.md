@@ -1,1 +1,2 @@
-# kotlin_lab
+# Lab for Learning Kotlin
+
