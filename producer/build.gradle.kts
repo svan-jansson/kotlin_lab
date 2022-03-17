@@ -14,14 +14,20 @@ repositories {
 
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
     implementation("com.google.guava:guava:30.1.1-jre")
-
     testImplementation("org.jetbrains.kotlin:kotlin-test")
-
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+
+    implementation("org.apache.kafka:kafka-clients:2.1.0")
+    implementation("org.apache.kafka:kafka-streams:2.1.0")
+    implementation("org.apache.kafka:connect-runtime:2.1.0")
+    implementation("io.confluent:kafka-json-serializer:5.0.1")
+}
+
+repositories {
+  mavenCentral()
+  maven(url = "https://packages.confluent.io/maven/")
 }
 
 application {
