@@ -1,4 +1,3 @@
-
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.*
 import org.gradle.api.tasks.testing.logging.TestLogEvent.*
 
@@ -8,9 +7,7 @@ plugins {
     application
 }
 
-repositories {
-    mavenCentral()
-}
+repositories { mavenCentral() }
 
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
@@ -27,23 +24,33 @@ dependencies {
 }
 
 repositories {
-  mavenCentral()
-  maven(url = "https://packages.confluent.io/maven/")
+    mavenCentral()
+    maven(url = "https://packages.confluent.io/maven/")
 }
 
-application {
-    mainClass.set("producer.AppKt")
-}
+application { mainClass.set("producer.AppKt") }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+tasks.withType<Jar> {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest { attributes["Main-Class"] = "producer.AppKt" }
+
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+}
+
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+    kotlinOptions { jvmTarget = "1.8" }
 }
 
 tasks.withType<Test> {
@@ -53,6 +60,5 @@ tasks.withType<Test> {
         showExceptions = true
         showCauses = true
         showStackTraces = true
-        
     }
 }
