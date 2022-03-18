@@ -3,20 +3,31 @@ package producer
 import java.util.*
 
 fun main() {
-    println("Starting Kafka producer...")
-
-    val producer = PickupProducer("kafka:9092")
-    
-    fun getDetails(): PickupDetails {
-        return PickupDetails(
-            id = UUID.randomUUID().toString(),
-            contents = listOf("a screwdriver", "diapers", "toilet paper"),
-            weight = 100.0)
+    var brokers = System.getenv("BROKERS")
+    if (brokers == null) {
+        brokers = "kafka:9092"
     }
 
-    producer.produce(5, fun(): PickupDetails {
-        val details = getDetails()
-        println("Sending pickup order: $details")
-        return details
-    })
+    println("Starting Kafka producer for broker(s) [${brokers}]...")
+
+    val producer = PickupProducer(brokers)
+
+    fun getDetails(): PickupDetails {
+        val items = Item.randomList()
+
+        return PickupDetails(
+                id = UUID.randomUUID().toString(),
+                contents = items.map { it.name },
+                weight = items.map { it.weight }.sum()
+        )
+    }
+
+    producer.produce(
+            Int.MAX_VALUE,
+            fun(): PickupDetails {
+                val details = getDetails()
+                println("Sending pickup order: $details")
+                return details
+            }
+    )
 }
