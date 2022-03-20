@@ -11,6 +11,16 @@ services:
       - kafka
       - zookeeper
 
+  pickup_consumer:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-pickup_consumer
+    environment:
+      - BROKERS=kafka:9092
+    depends_on:
+      - kafka
+      - zookeeper
+
   zookeeper:
     image: bitnami/zookeeper:3-debian-10
     ports:

@@ -13,14 +13,15 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.google.guava:guava:30.1.1-jre")
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
-
     implementation("org.apache.kafka:kafka-clients:3.1.0")
     implementation("org.apache.kafka:kafka-streams:3.1.0")
     implementation("org.apache.kafka:connect-runtime:3.1.0")
     implementation("io.confluent:kafka-json-serializer:5.0.1")
     implementation("com.google.code.gson:gson:2.2.4")
+    implementation("io.arrow-kt:arrow-core:1.0.1")
+
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 }
 
 repositories {

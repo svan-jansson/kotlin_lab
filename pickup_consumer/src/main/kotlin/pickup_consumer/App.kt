@@ -11,4 +11,6 @@ fun main() {
     println("Starting Kafka consumer for broker(s) [${brokers}]...")
 
     val consumer = PickupConsumer(brokers)
+
+    consumer.consume { println("Received: ${it}") }
 }

@@ -1,5 +1,6 @@
 package pickup_consumer
 
+import arrow.core.*
 import kotlin.test.*
 
 class ItemTest {
@@ -14,12 +15,26 @@ class ItemTest {
         }
         """.trimIndent()
 
-        val sut = PickupDetails.fromJson(json)
+        val actual = PickupDetails.fromJson(json)
 
-        assertEquals("abc", sut.id)
-        assertEquals("a", sut.contents.elementAt(0))
-        assertEquals("b", sut.contents.elementAt(1))
-        assertEquals("c", sut.contents.elementAt(2))
-        assertEquals(200.22, sut.weight)
+        assertTrue(actual is Some<PickupDetails>)
+
+        actual
+                .tap { assertEquals("abc", it.id) }
+                .tap { assertEquals("a", it.contents.elementAt(0)) }
+                .tap { assertEquals("b", it.contents.elementAt(1)) }
+                .tap { assertEquals("c", it.contents.elementAt(2)) }
+                .tap { assertEquals(200.22, it.weight) }
+    }
+
+    @Test
+    fun pickup_details_returns_option_none_for_invalid_json() {
+        val json = """
+        { "invalid json }
+        """.trimIndent()
+
+        val actual = PickupDetails.fromJson(json)
+
+        assertTrue(actual is None)
     }
 }
