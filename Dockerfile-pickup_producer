@@ -9,6 +9,6 @@ FROM openjdk:17
 
 RUN mkdir /app
 
-COPY --from=build /home/gradle/src/producer/build/libs/ /app/
+COPY --from=build /home/gradle/src/pickup_producer/build/libs/ /app/
 
-ENTRYPOINT ["java","-jar","/app/producer.jar"]
+ENTRYPOINT ["java","-jar","/app/pickup_producer.jar"]

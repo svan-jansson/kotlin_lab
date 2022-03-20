@@ -1,9 +1,6 @@
 package pickup_consumer
 
 import arrow.core.*
-import com.google.gson.Gson
-
-val gson = Gson()
 
 data class PickupDetails(val id: String, val contents: Collection<String>, val weight: Double) {
     companion object {

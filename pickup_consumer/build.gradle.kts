@@ -19,6 +19,7 @@ dependencies {
     implementation("io.confluent:kafka-json-serializer:5.0.1")
     implementation("com.google.code.gson:gson:2.2.4")
     implementation("io.arrow-kt:arrow-core:1.0.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")

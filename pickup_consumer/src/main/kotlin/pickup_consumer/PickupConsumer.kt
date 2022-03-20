@@ -12,7 +12,7 @@ import org.apache.kafka.common.errors.TopicExistsException
 import org.apache.kafka.common.serialization.StringDeserializer
 
 public class PickupConsumer(brokers: String) {
-    val topic = "pickup"
+    val topics = listOf("pickup", "pickup-retry")
     val partitions = 2
     val replication: Short = 1
 
@@ -30,7 +30,7 @@ public class PickupConsumer(brokers: String) {
 
     fun consume(handle: (PickupDetails) -> Unit) {
 
-        val consumer = KafkaConsumer<String, String>(config).apply { subscribe(listOf(topic)) }
+        val consumer = KafkaConsumer<String, String>(config).apply { subscribe(topics) }
 
         consumer.use {
             while (true) {
@@ -47,13 +47,15 @@ public class PickupConsumer(brokers: String) {
         }
     }
 
-    fun createTopic() {
-        val newTopic = NewTopic(topic, partitions, replication)
+    fun createTopics() {
+        topics.forEach {
+            val newTopic = NewTopic(it, partitions, replication)
 
-        try {
-            with(AdminClient.create(config)) { createTopics(listOf(newTopic)).all().get() }
-        } catch (e: ExecutionException) {
-            if (e.cause !is TopicExistsException) throw e
+            try {
+                with(AdminClient.create(config)) { createTopics(listOf(newTopic)).all().get() }
+            } catch (e: ExecutionException) {
+                if (e.cause !is TopicExistsException) throw e
+            }
         }
     }
 }
