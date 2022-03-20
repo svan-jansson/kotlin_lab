@@ -1,10 +1,10 @@
 version: '3'
 
 services:
-  producer:
+  pickup_producer:
     build:
       context: .
-      dockerfile: ./Dockerfile-producer
+      dockerfile: ./Dockerfile-pickup_producer
     environment:
       - BROKERS=kafka:9092
     depends_on:
