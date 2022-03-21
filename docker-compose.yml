@@ -48,3 +48,13 @@ services:
       - JVM_OPTS=-Xms32M -Xmx64M
     depends_on:
       - kafka
+
+  mongodb:
+    image: mongo:5.0
+    ports:
+      - 27017:27017
+    volumes:
+      - ~/apps/mongo:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=lab
+      - MONGO_INITDB_ROOT_PASSWORD=SuperSecret123
