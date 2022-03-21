@@ -9,6 +9,6 @@
 
 rootProject.name = "kotlin_lab"
 
-include("pickup_producer")
+include("delivery_api")
 
 include("pickup_consumer")

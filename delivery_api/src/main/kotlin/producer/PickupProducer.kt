@@ -1,4 +1,4 @@
-package pickup_producer
+package delivery_api
 
 import io.confluent.kafka.serializers.KafkaJsonSerializer
 import java.util.concurrent.ExecutionException

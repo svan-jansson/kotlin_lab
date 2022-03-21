@@ -13,14 +13,16 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.google.guava:guava:30.1.1-jre")
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
-
     implementation("org.apache.kafka:kafka-clients:3.1.0")
     implementation("org.apache.kafka:kafka-streams:3.1.0")
     implementation("org.apache.kafka:connect-runtime:3.1.0")
     implementation("io.confluent:kafka-json-serializer:5.0.1")
     implementation("com.google.code.gson:gson:2.2.4")
+    implementation("io.ktor:ktor-server-core:1.6.8")
+    implementation("io.ktor:ktor-server-netty:1.6.8")
+
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 }
 
 repositories {
@@ -28,7 +30,7 @@ repositories {
     maven(url = "https://packages.confluent.io/maven/")
 }
 
-application { mainClass.set("pickup_producer.AppKt") }
+application { mainClass.set("delivery_api.AppKt") }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -38,7 +40,7 @@ java {
 tasks.withType<Jar> {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    manifest { attributes["Main-Class"] = "pickup_producer.AppKt" }
+    manifest { attributes["Main-Class"] = "delivery_api.AppKt" }
 
     from(sourceSets.main.get().output)
 
