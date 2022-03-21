@@ -25,20 +25,17 @@ public class DeliveryRequestedProducer(brokers: String) {
                     VALUE_SERIALIZER_CLASS_CONFIG to KafkaJsonSerializer::class.qualifiedName
             )
 
-    fun produce(numMessages: Int, getDetails: () -> Package) {
-
+    init {
         createTopic()
+    }
+
+    fun produce(parcel: Package) {
 
         KafkaProducer<String, Package>(config).use { kafkaProducer ->
-            repeat(numMessages) {
-                val details = getDetails()
-                val record = ProducerRecord<String, Package>(topic, details.id, details)
+            val record = ProducerRecord<String, Package>(topic, parcel.id, parcel)
 
-                kafkaProducer.send(record)
-                kafkaProducer.flush()
-
-                Thread.sleep(1_000)
-            }
+            kafkaProducer.send(record)
+            kafkaProducer.flush()
         }
     }
 

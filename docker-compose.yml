@@ -5,8 +5,12 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile-delivery_api
+    ports:
+      - 8080:8080
     environment:
       - BROKERS=kafka:9092
+      - PORT=8080
+      - CONNECTION_STRING=mongodb://lab:SuperSecret123@mongodb:27017
     depends_on:
       - kafka
       - zookeeper

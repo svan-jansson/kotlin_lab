@@ -20,6 +20,8 @@ dependencies {
     implementation("com.google.code.gson:gson:2.2.4")
     implementation("io.ktor:ktor-server-core:1.6.8")
     implementation("io.ktor:ktor-server-netty:1.6.8")
+    implementation("io.arrow-kt:arrow-core:1.0.1")
+    implementation("org.litote.kmongo:kmongo:4.5.0")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")

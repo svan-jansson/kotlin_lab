@@ -11,4 +11,5 @@ RUN mkdir /app
 
 COPY --from=build /home/gradle/src/delivery_api/build/libs/ /app/
 
+EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app/delivery_api.jar"]
