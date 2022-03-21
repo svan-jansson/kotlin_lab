@@ -1,4 +1,4 @@
-package pickup_consumer
+package delivery_handler
 
 import arrow.core.*
 import io.confluent.kafka.serializers.KafkaJsonDeserializerConfig.JSON_VALUE_TYPE
@@ -24,7 +24,7 @@ public class PickupConsumer(brokers: String) {
                     KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.qualifiedName,
                     VALUE_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.qualifiedName,
                     JSON_VALUE_TYPE to String::class.java,
-                    GROUP_ID_CONFIG to "pickup_consumer",
+                    GROUP_ID_CONFIG to "delivery_handler",
                     AUTO_OFFSET_RESET_CONFIG to "latest"
             )
 
@@ -37,8 +37,7 @@ public class PickupConsumer(brokers: String) {
                 consumer.poll(ofMillis(100)).forEach {
                     val value = it.value()
 
-                    value
-                            .toOption<String>()
+                    value.toOption<String>()
                             .flatMap { PickupDetails.fromJson(it) }
                             .tap { handle(it) }
                             .tapNone { println("Could not parse message: ${value}") }

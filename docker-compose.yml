@@ -11,10 +11,10 @@ services:
       - kafka
       - zookeeper
 
-  pickup_consumer:
+  delivery_handler:
     build:
       context: .
-      dockerfile: ./Dockerfile-pickup_consumer
+      dockerfile: ./Dockerfile-delivery_handler
     environment:
       - BROKERS=kafka:9092
     depends_on:

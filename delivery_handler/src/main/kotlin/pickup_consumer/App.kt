@@ -1,4 +1,4 @@
-package pickup_consumer
+package delivery_handler
 
 import arrow.core.*
 import com.google.gson.Gson
@@ -30,8 +30,7 @@ fun handle(
         inDeliveryProducer: InDeliveryProducer,
         retryProducer: RetryProducer
 ) {
-    details
-            .toOption()
+    details.toOption()
             .map { droneTypeByWeight(it.weight) }
             .flatMap { DroneFleet.getAvailable(it) }
             .map { DroneDetails(it.second, it.first, details) }

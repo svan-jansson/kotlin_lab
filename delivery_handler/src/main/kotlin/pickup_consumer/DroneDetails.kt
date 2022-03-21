@@ -1,4 +1,4 @@
-package pickup_consumer
+package delivery_handler
 
 data class DroneDetails(val id: String, val type: DroneType, val carrying: PickupDetails) {
     override fun toString(): String = gson.toJson(this)

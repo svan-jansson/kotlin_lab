@@ -1,4 +1,4 @@
-package pickup_consumer
+package delivery_handler
 
 import arrow.core.*
 import kotlin.test.*

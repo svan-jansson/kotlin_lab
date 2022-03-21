@@ -30,7 +30,7 @@ repositories {
     maven(url = "https://packages.confluent.io/maven/")
 }
 
-application { mainClass.set("pickup_consumer.AppKt") }
+application { mainClass.set("delivery_handler.AppKt") }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -40,7 +40,7 @@ java {
 tasks.withType<Jar> {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    manifest { attributes["Main-Class"] = "pickup_consumer.AppKt" }
+    manifest { attributes["Main-Class"] = "delivery_handler.AppKt" }
 
     from(sourceSets.main.get().output)
 
