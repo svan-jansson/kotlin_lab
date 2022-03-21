@@ -10,12 +10,12 @@ fun main() {
 
     println("Starting Kafka producer for broker(s) [${brokers}]...")
 
-    val producer = PickupProducer(brokers)
+    val producer = DeliveryRequestedProducer(brokers)
 
-    fun getDetails(): PickupDetails {
+    fun getDetails(): Package {
         val items = Item.randomList()
 
-        return PickupDetails(
+        return Package(
                 id = UUID.randomUUID().toString(),
                 contents = items.map { it.name },
                 weight = items.map { it.weight }.sum()
@@ -24,9 +24,9 @@ fun main() {
 
     producer.produce(
             Int.MAX_VALUE,
-            fun(): PickupDetails {
+            fun(): Package {
                 val details = getDetails()
-                println("Sending pickup order: $details")
+                println("Delivery requested: $details")
                 return details
             }
     )

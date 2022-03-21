@@ -1,4 +1,4 @@
-package delivery_api
+package delivery_handler
 
 import io.confluent.kafka.serializers.KafkaJsonSerializer
 import java.util.concurrent.ExecutionException
@@ -10,8 +10,8 @@ import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.errors.TopicExistsException
 import org.apache.kafka.common.serialization.StringSerializer
 
-public class PickupProducer(brokers: String) {
-    val topic = "pickup"
+public class PackageInTransitProducer(brokers: String) {
+    val topic = "package-in-transit"
     val partitions = 2
     val replication: Short = 1
 
@@ -25,20 +25,15 @@ public class PickupProducer(brokers: String) {
                     VALUE_SERIALIZER_CLASS_CONFIG to KafkaJsonSerializer::class.qualifiedName
             )
 
-    fun produce(numMessages: Int, getDetails: () -> PickupDetails) {
+    fun produce(details: DroneDetails) {
 
         createTopic()
 
-        KafkaProducer<String, PickupDetails>(config).use { kafkaProducer ->
-            repeat(numMessages) {
-                val details = getDetails()
-                val record = ProducerRecord<String, PickupDetails>(topic, details.id, details)
+        KafkaProducer<String, DroneDetails>(config).use { kafkaProducer ->
+            val record = ProducerRecord<String, DroneDetails>(topic, details.id, details)
 
-                kafkaProducer.send(record)
-                kafkaProducer.flush()
-
-                Thread.sleep(1_000)
-            }
+            kafkaProducer.send(record)
+            kafkaProducer.flush()
         }
     }
 

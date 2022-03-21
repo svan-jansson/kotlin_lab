@@ -2,11 +2,11 @@ package delivery_handler
 
 import arrow.core.*
 
-data class PickupDetails(val id: String, val contents: Collection<String>, val weight: Double) {
+data class Package(val id: String, val contents: Collection<String>, val weight: Double) {
     companion object {
-        fun fromJson(json: String): Option<PickupDetails> {
+        fun fromJson(json: String): Option<Package> {
             try {
-                return gson.fromJson(json, PickupDetails::class.java).toOption()
+                return gson.fromJson(json, Package::class.java).toOption()
             } catch (ex: com.google.gson.JsonSyntaxException) {
                 return None
             }

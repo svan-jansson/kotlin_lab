@@ -11,8 +11,8 @@ import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.errors.TopicExistsException
 import org.apache.kafka.common.serialization.StringDeserializer
 
-public class PickupConsumer(brokers: String) {
-    val topics = listOf("pickup", "pickup-retry")
+public class DeliveryRequestedConsumer(brokers: String) {
+    val topics = listOf("delivery-requested", "delivery-requested-retry")
     val partitions = 2
     val replication: Short = 1
 
@@ -28,7 +28,7 @@ public class PickupConsumer(brokers: String) {
                     AUTO_OFFSET_RESET_CONFIG to "latest"
             )
 
-    fun consume(handle: (PickupDetails) -> Unit) {
+    fun consume(handle: (Package) -> Unit) {
 
         val consumer = KafkaConsumer<String, String>(config).apply { subscribe(topics) }
 
@@ -38,7 +38,7 @@ public class PickupConsumer(brokers: String) {
                     val value = it.value()
 
                     value.toOption<String>()
-                            .flatMap { PickupDetails.fromJson(it) }
+                            .flatMap { Package.fromJson(it) }
                             .tap { handle(it) }
                             .tapNone { println("Could not parse message: ${value}") }
                 }

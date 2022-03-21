@@ -10,8 +10,8 @@ import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.errors.TopicExistsException
 import org.apache.kafka.common.serialization.StringSerializer
 
-public class RetryProducer(brokers: String) {
-    val topic = "pickup-retry"
+public class DeliveryRequestedRetryProducer(brokers: String) {
+    val topic = "delivery-requested-retry"
     val partitions = 2
     val replication: Short = 1
 
@@ -25,12 +25,12 @@ public class RetryProducer(brokers: String) {
                     VALUE_SERIALIZER_CLASS_CONFIG to KafkaJsonSerializer::class.qualifiedName
             )
 
-    fun produce(retryDetails: PickupDetails) {
+    fun produce(retryDetails: Package) {
 
         createTopic()
 
-        KafkaProducer<String, PickupDetails>(config).use { kafkaProducer ->
-            val record = ProducerRecord<String, PickupDetails>(topic, retryDetails.id, retryDetails)
+        KafkaProducer<String, Package>(config).use { kafkaProducer ->
+            val record = ProducerRecord<String, Package>(topic, retryDetails.id, retryDetails)
 
             kafkaProducer.send(record)
             kafkaProducer.flush()

@@ -15,9 +15,9 @@ class ItemTest {
         }
         """.trimIndent()
 
-        val actual = PickupDetails.fromJson(json)
+        val actual = Package.fromJson(json)
 
-        assertTrue(actual is Some<PickupDetails>)
+        assertTrue(actual is Some<Package>)
 
         actual
                 .tap { assertEquals("abc", it.id) }
@@ -33,7 +33,7 @@ class ItemTest {
         { "invalid json }
         """.trimIndent()
 
-        val actual = PickupDetails.fromJson(json)
+        val actual = Package.fromJson(json)
 
         assertTrue(actual is None)
     }
