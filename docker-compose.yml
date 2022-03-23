@@ -25,6 +25,24 @@ services:
       - kafka
       - zookeeper
 
+  grafana:
+    image: grafana/grafana:7.3.4
+    container_name: grafana
+    volumes:
+      - ./.grafana:/var/lib/grafana
+    ports:
+      - "3000:3000"
+
+  prometheus:
+    image: prom/prometheus:v2.23.0
+    container_name: prometheus
+    volumes:
+      - ./.prometheus/etc:/etc/prometheus
+      - ./.prometheus/data:/prometheus
+    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
   zookeeper:
     image: bitnami/zookeeper:3-debian-10
     ports:
