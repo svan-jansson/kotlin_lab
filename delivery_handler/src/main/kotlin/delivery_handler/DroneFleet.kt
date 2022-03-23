@@ -9,16 +9,21 @@ class DroneFleet {
 
         val lock = Any()
 
-        fun getAvailable(type: DroneType): Option<Pair<DroneType, String>> {
+        fun getAvailable(
+                type: DroneType,
+                onDeliveryCompleted: (Pair<DroneType, String>) -> Unit
+        ): Option<Pair<DroneType, String>> {
             synchronized(lock) {
                 val current = fleet.getOrDefault(type, 0)
 
                 return when {
                     current <= 0 -> None
                     else -> {
+                        val id = droneId(type, current)
+                        val toReturn = Pair(type, id)
                         fleet.put(type, current - 1)
-                        scheduleReturnIn(10, type)
-                        return Pair(type, droneId(type, current)).toOption()
+                        scheduleReturnIn(10, toReturn, onDeliveryCompleted)
+                        return toReturn.toOption()
                     }
                 }
             }
@@ -26,13 +31,18 @@ class DroneFleet {
 
         fun droneId(type: DroneType, index: Int): String = "$type-$index"
 
-        fun scheduleReturnIn(seconds: Long, type: DroneType) {
+        fun scheduleReturnIn(
+                seconds: Long,
+                drone: Pair<DroneType, String>,
+                onDeliveryCompleted: (Pair<DroneType, String>) -> Unit
+        ) {
             GlobalScope.launch {
                 delay(seconds * 1000)
                 synchronized(lock) {
-                    val current = fleet.getOrDefault(type, 0)
-                    fleet.put(type, current + 1)
-                    println("Drone of type $type returned after $seconds seconds")
+                    val current = fleet.getOrDefault(drone.first, 0)
+                    fleet.put(drone.first, current + 1)
+                    println("Drone with id ${drone.second} returned after $seconds seconds")
+                    onDeliveryCompleted(drone)
                 }
             }
         }

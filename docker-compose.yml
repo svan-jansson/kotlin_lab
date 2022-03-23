@@ -25,6 +25,19 @@ services:
       - kafka
       - zookeeper
 
+  delivery_metrics:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-delivery_metrics
+    ports:
+      - 8081:8081
+    environment:
+      - BROKERS=kafka:9092
+      - PORT=8081
+    depends_on:
+      - kafka
+      - zookeeper
+
   grafana:
     image: grafana/grafana:7.3.4
     container_name: grafana

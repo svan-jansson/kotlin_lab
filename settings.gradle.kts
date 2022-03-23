@@ -12,3 +12,5 @@ rootProject.name = "kotlin_lab"
 include("delivery_api")
 
 include("delivery_handler")
+
+include("delivery_metrics")

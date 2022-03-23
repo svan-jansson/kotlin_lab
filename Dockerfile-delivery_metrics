@@ -1,0 +1,14 @@
+FROM gradle:jdk17 AS build
+COPY --chown=gradle:gradle . /home/gradle/src
+WORKDIR /home/gradle/src
+
+RUN gradle build --no-daemon
+
+FROM openjdk:17
+
+RUN mkdir /app
+
+COPY --from=build /home/gradle/src/delivery_metrics/build/libs/ /app/
+
+EXPOSE 8081
+ENTRYPOINT ["java","-jar","/app/delivery_metrics.jar"]
