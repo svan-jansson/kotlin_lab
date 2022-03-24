@@ -24,11 +24,11 @@ public class DeliveryRequestedRetryProducer(brokers: String) {
                     KEY_SERIALIZER_CLASS_CONFIG to StringSerializer::class.qualifiedName,
                     VALUE_SERIALIZER_CLASS_CONFIG to KafkaJsonSerializer::class.qualifiedName
             )
+    init {
+        createTopic()
+    }
 
     fun produce(retryDetails: Package) {
-
-        createTopic()
-
         KafkaProducer<String, Package>(config).use { kafkaProducer ->
             val record = ProducerRecord<String, Package>(topic, retryDetails.id, retryDetails)
 

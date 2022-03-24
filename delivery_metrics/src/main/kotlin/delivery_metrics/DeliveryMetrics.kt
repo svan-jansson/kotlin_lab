@@ -15,12 +15,12 @@ class WeightCounterLabels : LabelSet() {
 
 object DeliveryMetrics : PrometheusMetrics() {
     val deliveryEvents by
-            counter("delivery-events", "Events produced by the delivery system") {
+            counter("delivery_events", "Events produced by the delivery system") {
                 DeliveryEventLabels()
             }
 
     val weightCounter by
-            counter("weight-delivered-by-drone", "Total weight of deliveries per drone") {
+            counter("weight_delivered_by_drone", "Total weight of deliveries per drone") {
                 WeightCounterLabels()
             }
 

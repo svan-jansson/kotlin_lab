@@ -25,10 +25,13 @@ public class PackageDeliveredProducer(brokers: String) {
                     VALUE_SERIALIZER_CLASS_CONFIG to KafkaJsonSerializer::class.qualifiedName
             )
 
+    init {
+        createTopic()
+    }
+
     fun produce(drone: Pair<DroneType, String>, parcel: Package) {
 
         val details = DroneDetails(drone.second, drone.first, parcel)
-        createTopic()
 
         KafkaProducer<String, DroneDetails>(config).use { kafkaProducer ->
             val record = ProducerRecord<String, DroneDetails>(topic, details.id, details)

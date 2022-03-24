@@ -1,0 +1,16 @@
+{
+  "name": "loadtest",
+  "version": "1.0.0",
+  "description": "load tests for drone delivery system",
+  "main": "index.js",
+  "author": "Erik Svensson",
+  "license": "MIT",
+  "dependencies": {
+    "artillery": "^2.0.0-13"
+  },
+  "scripts": {
+    "low": "artillery run low-load.yml",
+    "medium": "artillery run medium-load.yml",
+    "high": "artillery run high-load.yml"
+  }
+}
