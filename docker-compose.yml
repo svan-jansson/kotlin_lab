@@ -38,6 +38,17 @@ services:
       - kafka
       - zookeeper
 
+  delivery_state:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-delivery_state
+    environment:
+      - BROKERS=kafka:9092
+      - CONNECTION_STRING=mongodb://lab:SuperSecret123@mongodb:27017
+    depends_on:
+      - kafka
+      - zookeeper
+
   grafana:
     image: grafana/grafana:7.3.4
     container_name: grafana

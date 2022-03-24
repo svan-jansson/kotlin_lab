@@ -56,7 +56,7 @@ fun collectMetrics(brokers: String) {
                     VALUE_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.qualifiedName,
                     JSON_VALUE_TYPE to String::class.java,
                     GROUP_ID_CONFIG to "delivery_metrics",
-                    AUTO_OFFSET_RESET_CONFIG to "earliest"
+                    AUTO_OFFSET_RESET_CONFIG to "latest"
             )
 
     val consumer = KafkaConsumer<String, String>(config).apply { subscribe(topics) }

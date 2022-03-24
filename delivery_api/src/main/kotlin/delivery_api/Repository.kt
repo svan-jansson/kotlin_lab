@@ -1,16 +1,28 @@
 package delivery_api
 
 import arrow.core.*
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.*
 import org.litote.kmongo.*
 
 enum class Status {
-    PICKUP_REQUESTED,
+    UNKOWN,
+    REGISTERED,
+    WAITING_FOR_PICKUP,
+    DELAYED,
     IN_TRANSIT,
     DELIVERED
 }
 
-data class PackageStatus(val parcel: Package, val status: Status) {
+data class Event(val timestamp: String, val status: Status, val droneId: String?) {
+    override fun toString(): String {
+        return gson.toJson(this)
+    }
+}
+
+data class PackageStatus(val parcel: Package, val status: Status, val eventLog: List<Event>) {
     override fun toString(): String {
         return gson.toJson(this)
     }
@@ -37,7 +49,20 @@ public class Repository(val connectionString: String) {
     fun storeRequest(parcel: Package): Option<PackageStatus> {
         try {
             val collection = database.getCollection("packages")
-            val packageStatus = PackageStatus(parcel, Status.PICKUP_REQUESTED)
+            val packageStatus =
+                    PackageStatus(
+                            parcel,
+                            Status.REGISTERED,
+                            listOf(
+                                    Event(
+                                            Instant.now()
+                                                    .atZone(ZoneOffset.UTC)
+                                                    .format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
+                                            Status.REGISTERED,
+                                            null
+                                    )
+                            )
+                    )
             collection.insertOne(packageStatus.toString())
 
             return Some(packageStatus)

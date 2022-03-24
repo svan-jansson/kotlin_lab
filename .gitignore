@@ -33,3 +33,5 @@ bin
 .grafana/
 .loki/
 .prometheus/
+
+node_modules/
