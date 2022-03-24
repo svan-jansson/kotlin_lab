@@ -13,6 +13,11 @@ class WeightCounterLabels : LabelSet() {
     var type by label()
 }
 
+class DeliveryCounterLabels : LabelSet() {
+    var id by label()
+    var type by label()
+}
+
 object DeliveryMetrics : PrometheusMetrics() {
     val deliveryEvents by
             counter("delivery_events", "Events produced by the delivery system") {
@@ -22,6 +27,11 @@ object DeliveryMetrics : PrometheusMetrics() {
     val weightCounter by
             counter("weight_delivered_by_drone", "Total weight of deliveries per drone") {
                 WeightCounterLabels()
+            }
+
+    val deliveryCounter by
+            counter("deliveries_by_drone", "Count of deliveries made by a drone") {
+                DeliveryCounterLabels()
             }
 
     val jvm by submetrics(DefaultJvmMetrics())

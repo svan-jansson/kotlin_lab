@@ -19,10 +19,17 @@ class DroneFleet {
                 return when {
                     current <= 0 -> None
                     else -> {
+                        val timeToDeliver: Long =
+                                when {
+                                    type == DroneType.LIGHT -> 6
+                                    type == DroneType.MEDIUM -> 8
+                                    type == DroneType.HEAVY -> 10
+                                    else -> 0
+                                }
                         val id = droneId(type, current)
                         val toReturn = Pair(type, id)
                         fleet.put(type, current - 1)
-                        scheduleReturnIn(10, toReturn, onDeliveryCompleted)
+                        scheduleReturnIn(timeToDeliver, toReturn, onDeliveryCompleted)
                         return toReturn.toOption()
                     }
                 }
@@ -37,12 +44,17 @@ class DroneFleet {
                 onDeliveryCompleted: (Pair<DroneType, String>) -> Unit
         ) {
             GlobalScope.launch {
-                delay(seconds * 1000)
+
+                // Drop off package at midpoint
+                delay((seconds / 2) * 1000)
+                onDeliveryCompleted(drone)
+
+                // Return drone
+                delay((seconds / 2) * 1000)
                 synchronized(lock) {
                     val current = fleet.getOrDefault(drone.first, 0)
                     fleet.put(drone.first, current + 1)
                     println("Drone with id ${drone.second} returned after $seconds seconds")
-                    onDeliveryCompleted(drone)
                 }
             }
         }

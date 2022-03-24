@@ -41,10 +41,11 @@ fun handle(
             .tap { println("Package in transit with drone: ${it.id}") }
             .tap { inDeliveryProducer.produce(it) }
             .tapNone {
-                println("No drones available. Retrying in 30 seconds...")
+                val retryIn = 5
+                println("No drones available. Retrying in $retryIn seconds...")
 
                 GlobalScope.launch {
-                    delay(30_000)
+                    delay(retryIn * 1000L)
                     retryProducer.produce(details)
                 }
             }

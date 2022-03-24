@@ -83,6 +83,11 @@ fun collectMetrics(brokers: String) {
                             id = droneId
                             type = droneType
                         }
+
+                        DeliveryMetrics.deliveryCounter.add(1.0) {
+                            id = droneId
+                            type = droneType
+                        }
                     }
                 }
             }
