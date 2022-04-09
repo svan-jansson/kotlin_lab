@@ -108,8 +108,8 @@ fun collectMetrics(brokers: String) {
                         val json = it.value()
                         val data = gson.fromJson(json, Map::class.java)
 
-                        val droneId = data["id"] as String
-                        val droneType = data["type"] as String
+                        val droneType = data["first"] as String
+                        val droneId = data["second"] as String
 
                         DeliveryMetrics.droneActiveGauge.set(0.0) { 
                             id = droneId

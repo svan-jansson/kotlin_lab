@@ -5,7 +5,7 @@ import kotlinx.coroutines.*
 
 class DroneFleet {
     companion object {
-        val fleet = mutableMapOf(DroneType.LIGHT to 5, DroneType.MEDIUM to 4, DroneType.HEAVY to 3)
+        val fleet = mutableMapOf(DroneType.LIGHT to 10, DroneType.MEDIUM to 7, DroneType.HEAVY to 5)
 
         val lock = Any()
 
