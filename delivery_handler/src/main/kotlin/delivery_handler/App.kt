@@ -19,10 +19,11 @@ fun main() {
     val inDeliveryProducer = PackageInTransitProducer(brokers)
     val retryProducer = DeliveryRequestedRetryProducer(brokers)
     val packageDeliveredProducer = PackageDeliveredProducer(brokers)
+    val droneReturnedProducer = DroneReturnedProducer(brokers)
 
     consumer.consume {
         println("Delivery request received: $it")
-        handle(it, inDeliveryProducer, retryProducer, packageDeliveredProducer)
+        handle(it, inDeliveryProducer, retryProducer, packageDeliveredProducer, droneReturnedProducer)
     }
 }
 
@@ -30,12 +31,21 @@ fun handle(
         details: Package,
         inDeliveryProducer: PackageInTransitProducer,
         retryProducer: DeliveryRequestedRetryProducer,
-        packageDeliveredProducer: PackageDeliveredProducer
+        packageDeliveredProducer: PackageDeliveredProducer,
+        droneReturnedProducer: DroneReturnedProducer
 ) {
     details.toOption()
             .map { droneTypeByWeight(it.weight) }
             .flatMap {
-                DroneFleet.getAvailable(it) { packageDeliveredProducer.produce(it, details) }
+                val packageDelivered = fun (drone: Pair<DroneType, String>) {
+                    packageDeliveredProducer.produce(drone, details)
+                }
+
+                val droneReturned = fun (drone: Pair<DroneType, String>) {
+                    droneReturnedProducer.produce(drone)
+                }
+
+                DroneFleet.getAvailable(it, packageDelivered, droneReturned)
             }
             .map { DroneDetails(it.second, it.first, details) }
             .tap { println("Package in transit with drone: ${it.id}") }

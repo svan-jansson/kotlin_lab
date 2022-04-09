@@ -18,6 +18,11 @@ class DeliveryCounterLabels : LabelSet() {
     var type by label()
 }
 
+class DroneActiveLabels : LabelSet() {
+    var id by label()
+    var type by label()
+}
+
 object DeliveryMetrics : PrometheusMetrics() {
     val deliveryEvents by
             counter("delivery_events", "Events produced by the delivery system") {
@@ -32,6 +37,11 @@ object DeliveryMetrics : PrometheusMetrics() {
     val deliveryCounter by
             counter("deliveries_by_drone", "Count of deliveries made by a drone") {
                 DeliveryCounterLabels()
+            }
+    
+    val droneActiveGauge by 
+            gauge("drone_active", "Current active status of drone") {
+                DroneActiveLabels()
             }
 
     val jvm by submetrics(DefaultJvmMetrics())

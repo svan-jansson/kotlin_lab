@@ -44,7 +44,8 @@ fun collectMetrics(brokers: String) {
                     "delivery-requested",
                     "delivery-requested-retry",
                     "package-in-transit",
-                    "package-delivered"
+                    "package-delivered",
+                    "drone-returned"
             )
 
     val config =
@@ -85,6 +86,32 @@ fun collectMetrics(brokers: String) {
                         }
 
                         DeliveryMetrics.deliveryCounter.add(1.0) {
+                            id = droneId
+                            type = droneType
+                        }
+                    }
+
+                    if (kafkaTopic == "package-in-transit") {
+                        val json = it.value()
+                        val data = gson.fromJson(json, Map::class.java)
+
+                        val droneId = data["id"] as String
+                        val droneType = data["type"] as String
+
+                        DeliveryMetrics.droneActiveGauge.set(1.0) { 
+                            id = droneId
+                            type = droneType
+                        }
+                    }
+
+                    if (kafkaTopic == "drone-returned") {
+                        val json = it.value()
+                        val data = gson.fromJson(json, Map::class.java)
+
+                        val droneId = data["id"] as String
+                        val droneType = data["type"] as String
+
+                        DeliveryMetrics.droneActiveGauge.set(0.0) { 
                             id = droneId
                             type = droneType
                         }

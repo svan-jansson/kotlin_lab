@@ -6,7 +6,7 @@
   "author": "Erik Svensson",
   "license": "MIT",
   "dependencies": {
-    "artillery": "^2.0.0-13"
+    "artillery": "^2.0.0"
   },
   "scripts": {
     "low": "artillery run low-load.yml",

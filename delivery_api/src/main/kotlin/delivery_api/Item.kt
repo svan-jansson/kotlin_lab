@@ -16,7 +16,7 @@ data class Item(val name: String, val weight: Double) {
                             "lipstick" to 0.01,
                             "shampoo" to 0.25
                     )
-            val pick = rng.nextInt(1, 6)
+            val pick = rng.nextInt(6) + 1
 
             return sequence {
                         repeat(pick) {
