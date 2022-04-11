@@ -1,11 +1,13 @@
 package delivery_api
 
-import arrow.core.*
+import arrow.core.None
+import arrow.core.Option
+import arrow.core.Some
+import arrow.core.toOption
+import org.litote.kmongo.*
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.util.*
-import org.litote.kmongo.*
 
 enum class Status {
     UNKOWN,
@@ -37,7 +39,7 @@ public class Repository(val connectionString: String) {
         try {
             val collection = database.getCollection<PackageStatus>("packages")
             val packageStatus =
-                    collection.findOne(PackageStatus::parcel / Package::id eq id).toOption()
+                collection.findOne(PackageStatus::parcel / Package::id eq id).toOption()
 
             return packageStatus
         } catch (ex: Exception) {
@@ -50,19 +52,19 @@ public class Repository(val connectionString: String) {
         try {
             val collection = database.getCollection("packages")
             val packageStatus =
-                    PackageStatus(
-                            parcel,
+                PackageStatus(
+                    parcel,
+                    Status.REGISTERED,
+                    listOf(
+                        Event(
+                            Instant.now()
+                                .atZone(ZoneOffset.UTC)
+                                .format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
                             Status.REGISTERED,
-                            listOf(
-                                    Event(
-                                            Instant.now()
-                                                    .atZone(ZoneOffset.UTC)
-                                                    .format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
-                                            Status.REGISTERED,
-                                            null
-                                    )
-                            )
+                            null
+                        )
                     )
+                )
             collection.insertOne(packageStatus.toString())
 
             return Some(packageStatus)

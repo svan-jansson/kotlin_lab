@@ -25,24 +25,24 @@ class DroneActiveLabels : LabelSet() {
 
 object DeliveryMetrics : PrometheusMetrics() {
     val deliveryEvents by
-            counter("delivery_events", "Events produced by the delivery system") {
-                DeliveryEventLabels()
-            }
+    counter("delivery_events", "Events produced by the delivery system") {
+        DeliveryEventLabels()
+    }
 
     val weightCounter by
-            counter("weight_delivered_by_drone", "Total weight of deliveries per drone") {
-                WeightCounterLabels()
-            }
+    counter("weight_delivered_by_drone", "Total weight of deliveries per drone") {
+        WeightCounterLabels()
+    }
 
     val deliveryCounter by
-            counter("deliveries_by_drone", "Count of deliveries made by a drone") {
-                DeliveryCounterLabels()
-            }
-    
-    val droneActiveGauge by 
-            gauge("drone_active", "Current active status of drone") {
-                DroneActiveLabels()
-            }
+    counter("deliveries_by_drone", "Count of deliveries made by a drone") {
+        DeliveryCounterLabels()
+    }
+
+    val droneActiveGauge by
+    gauge("drone_active", "Current active status of drone") {
+        DroneActiveLabels()
+    }
 
     val jvm by submetrics(DefaultJvmMetrics())
 }

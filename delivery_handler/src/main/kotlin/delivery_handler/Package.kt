@@ -1,6 +1,8 @@
 package delivery_handler
 
-import arrow.core.*
+import arrow.core.None
+import arrow.core.Option
+import arrow.core.toOption
 
 data class Package(val id: String, val contents: Collection<String>, val weight: Double) {
     companion object {
@@ -12,5 +14,6 @@ data class Package(val id: String, val contents: Collection<String>, val weight:
             }
         }
     }
+
     override fun toString(): String = gson.toJson(this)
 }

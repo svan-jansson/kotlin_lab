@@ -1,8 +1,7 @@
 package delivery_state
 
-import arrow.core.*
-import java.util.*
-import org.litote.kmongo.*
+import org.litote.kmongo.KMongo
+import org.litote.kmongo.updateOne
 
 enum class Status {
     UNKOWN,
@@ -28,12 +27,12 @@ public class Repository(val connectionString: String) {
         try {
             val collection = database.getCollection("packages")
             val dronePart =
-                    when {
-                        event.droneId == null -> ""
-                        else -> ", droneId: '${event.droneId}'"
-                    }
+                when {
+                    event.droneId == null -> ""
+                    else -> ", droneId: '${event.droneId}'"
+                }
             val updateQuery =
-                    """
+                """
             { 
                 ${'$'}set: { status: '$status' },
                 ${'$'}push: {

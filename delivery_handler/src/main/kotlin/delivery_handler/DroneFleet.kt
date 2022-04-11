@@ -1,7 +1,11 @@
 package delivery_handler
 
-import arrow.core.*
-import kotlinx.coroutines.*
+import arrow.core.None
+import arrow.core.Option
+import arrow.core.toOption
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class DroneFleet {
     companion object {
@@ -10,9 +14,9 @@ class DroneFleet {
         val lock = Any()
 
         fun getAvailable(
-                type: DroneType,
-                onDeliveryCompleted: (Pair<DroneType, String>) -> Unit,
-                onDroneReturned: (Pair<DroneType, String>) -> Unit
+            type: DroneType,
+            onDeliveryCompleted: (Pair<DroneType, String>) -> Unit,
+            onDroneReturned: (Pair<DroneType, String>) -> Unit
         ): Option<Pair<DroneType, String>> {
             synchronized(lock) {
                 val current = fleet.getOrDefault(type, 0)
@@ -21,12 +25,12 @@ class DroneFleet {
                     current <= 0 -> None
                     else -> {
                         val timeToDeliver: Long =
-                                when {
-                                    type == DroneType.LIGHT -> 6
-                                    type == DroneType.MEDIUM -> 8
-                                    type == DroneType.HEAVY -> 10
-                                    else -> 0
-                                }
+                            when {
+                                type == DroneType.LIGHT -> 6
+                                type == DroneType.MEDIUM -> 8
+                                type == DroneType.HEAVY -> 10
+                                else -> 0
+                            }
                         val id = droneId(type, current)
                         val toReturn = Pair(type, id)
                         fleet.put(type, current - 1)
@@ -40,10 +44,10 @@ class DroneFleet {
         fun droneId(type: DroneType, index: Int): String = "$type-$index"
 
         fun scheduleReturnIn(
-                seconds: Long,
-                drone: Pair<DroneType, String>,
-                onDeliveryCompleted: (Pair<DroneType, String>) -> Unit,
-                onDroneReturned: (Pair<DroneType, String>) -> Unit
+            seconds: Long,
+            drone: Pair<DroneType, String>,
+            onDeliveryCompleted: (Pair<DroneType, String>) -> Unit,
+            onDroneReturned: (Pair<DroneType, String>) -> Unit
         ) {
             GlobalScope.launch {
 
