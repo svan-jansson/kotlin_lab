@@ -21,7 +21,7 @@ cd loadtest
 yarn run low
 
 # start generating a medium load
-yarn run low
+yarn run medium
 
 # start generating a high load
 yarn run high
